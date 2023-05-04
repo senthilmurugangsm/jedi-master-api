@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StarWarsInfo {
 
-    private Starship starship;
+    private Object starship; // Object type used to return empty {} response, if no starships.
     private int crew;
     @JsonProperty("isLeiaOnPlanet")
     private boolean leiaOnPlanet;

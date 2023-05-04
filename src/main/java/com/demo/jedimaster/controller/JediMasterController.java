@@ -55,7 +55,7 @@ public class JediMasterController {
                 Starship starship = new Starship(starshipApiResponse.getName(), starshipApiResponse.getStarshipClass(), starshipApiResponse.getModel());
                 starWarsInfo.setStarship(starship);
             } else {
-                starWarsInfo.setStarship(null);
+                starWarsInfo.setStarship(new Object());
             }
 
             String starshipDeathStarUrl = swapiApiBaseUrl + starshipDeathStar;
