@@ -10,7 +10,7 @@ public class RestTemplateResponseHandler {
         if (responseEntity.getStatusCode().is2xxSuccessful() && responseEntity.getBody() != null) {
             return responseEntity.getBody();
         } else {
-            String errorMessage = "Error occurred while calling REST API. Status code: " + responseEntity.getStatusCodeValue();
+            String errorMessage = "Error occurred while calling Swapi API. Status code: " + responseEntity.getStatusCodeValue();
             if (responseEntity.getBody() instanceof String) {
                 errorMessage += ". Error message: " + responseEntity.getBody();
             }

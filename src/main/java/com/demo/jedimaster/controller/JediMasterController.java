@@ -5,6 +5,7 @@ import com.demo.jedimaster.dto.Starship;
 import com.demo.jedimaster.model.PeopleApiResponse;
 import com.demo.jedimaster.model.StarshipApiResponse;
 import com.demo.jedimaster.service.StarWarService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/jedi-master")
+@Log4j2
 public class JediMasterController {
 
     @Autowired
@@ -37,7 +39,7 @@ public class JediMasterController {
     private String starshipDeathStar;
 
     @GetMapping(value = "/information")
-    public ResponseEntity<Object> test() {
+    public ResponseEntity<Object> fetchStarWarsInformation() {
         try {
             StarshipApiResponse starshipApiResponse = null;
             StarWarsInfo starWarsInfo = new StarWarsInfo();
@@ -62,13 +64,13 @@ public class JediMasterController {
 
             String planetAlderaanUrl = swapiApiBaseUrl + planetAlderaan;
             String peopleLeiaOrganaUrl = swapiApiBaseUrl + peopleLeiaOrgana;
-            starWarsInfo.setLeiaOnPlanet(starWarService.isPeopleLiveOnPlanet(planetAlderaanUrl, peopleLeiaOrganaUrl));
+            boolean isLeiaOnPlanet = starWarService.isPeopleLiveOnPlanet(planetAlderaanUrl, peopleLeiaOrganaUrl);
+            starWarsInfo.setLeiaOnPlanet(isLeiaOnPlanet);
 
             return new ResponseEntity<>(starWarsInfo, HttpStatus.OK);
         } catch (Exception ex) {
-            System.out.println("error" + ex.getMessage());
-            ex.printStackTrace();
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error("Server error : {}", ex.getMessage());
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
