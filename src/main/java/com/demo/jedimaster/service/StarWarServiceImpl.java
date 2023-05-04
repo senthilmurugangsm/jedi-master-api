@@ -70,6 +70,7 @@ public class StarWarServiceImpl implements StarWarService {
         try {
             StarshipApiResponse starshipApiResponse = fetchStarship(starshipUrl);
             String crewValue = starshipApiResponse.getCrew();
+            log.info("Crew value : {}", crewValue);
             if (crewValue != null) {
                 return Integer.parseInt(crewValue.replace(",", ""));
             }

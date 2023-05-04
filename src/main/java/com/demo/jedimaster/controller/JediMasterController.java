@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/jedi-master")
+@RequestMapping(value = "/jedi-master")
 @Log4j2
 public class JediMasterController {
 
@@ -40,38 +40,48 @@ public class JediMasterController {
 
     @GetMapping(value = "/information")
     public ResponseEntity<Object> fetchStarWarsInformation() {
+
         try {
-            StarshipApiResponse starshipApiResponse = null;
             StarWarsInfo starWarsInfo = new StarWarsInfo();
-
-            String peopleDarthVaderUrl = swapiApiBaseUrl + peopleDarthVader;
-            PeopleApiResponse response = starWarService.fetchPeople(peopleDarthVaderUrl);
-
-            List<String> starships = response.getStarships();
-
-            if (starships != null && starships.size() > 0) {
-                String starshipDarthVaderUrl = starships.get(0);
-                starshipApiResponse = starWarService.fetchStarship(starshipDarthVaderUrl);
-                Starship starship = new Starship(starshipApiResponse.getName(), starshipApiResponse.getStarshipClass(), starshipApiResponse.getModel());
-                starWarsInfo.setStarship(starship);
-            } else {
-                starWarsInfo.setStarship(new Object());
-            }
-
-            String starshipDeathStarUrl = swapiApiBaseUrl + starshipDeathStar;
-            int crew = starWarService.getCrewCount(starshipDeathStarUrl);
-            starWarsInfo.setCrew(crew);
-
-            String planetAlderaanUrl = swapiApiBaseUrl + planetAlderaan;
-            String peopleLeiaOrganaUrl = swapiApiBaseUrl + peopleLeiaOrgana;
-            boolean isLeiaOnPlanet = starWarService.isPeopleLiveOnPlanet(planetAlderaanUrl, peopleLeiaOrganaUrl);
-            starWarsInfo.setLeiaOnPlanet(isLeiaOnPlanet);
-
+            findDarthVaderStarship(starWarsInfo);
+            findDeathStarCrewCount(starWarsInfo);
+            checkLeiaOnPlanetAlderaan(starWarsInfo);
             return new ResponseEntity<>(starWarsInfo, HttpStatus.OK);
         } catch (Exception ex) {
             log.error("Server error : {}", ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private void findDarthVaderStarship(StarWarsInfo starWarsInfo) {
+        String peopleDarthVaderUrl = swapiApiBaseUrl + peopleDarthVader;
+        PeopleApiResponse darthVaderPeople = starWarService.fetchPeople(peopleDarthVaderUrl);
+        List<String> starships = darthVaderPeople.getStarships();
+
+        StarshipApiResponse starshipApiResponse = null;
+        if (starships != null && starships.size() > 0) {
+            String starshipDarthVaderUrl = starships.get(0);
+            starshipApiResponse = starWarService.fetchStarship(starshipDarthVaderUrl);
+            Starship starship = new Starship(starshipApiResponse.getName(), starshipApiResponse.getStarshipClass(), starshipApiResponse.getModel());
+            starWarsInfo.setStarship(starship);
+            log.info("Total starships : {}", starships.size());
+        } else {
+            log.info("No starships found!");
+            starWarsInfo.setStarship(new Object());
+        }
+    }
+
+    private void findDeathStarCrewCount(StarWarsInfo starWarsInfo) {
+        String starshipDeathStarUrl = swapiApiBaseUrl + starshipDeathStar;
+        int crew = starWarService.getCrewCount(starshipDeathStarUrl);
+        starWarsInfo.setCrew(crew);
+    }
+
+    private void checkLeiaOnPlanetAlderaan(StarWarsInfo starWarsInfo) {
+        String planetAlderaanUrl = swapiApiBaseUrl + planetAlderaan;
+        String peopleLeiaOrganaUrl = swapiApiBaseUrl + peopleLeiaOrgana;
+        boolean isLeiaOnPlanet = starWarService.isPeopleLiveOnPlanet(planetAlderaanUrl, peopleLeiaOrganaUrl);
+        starWarsInfo.setLeiaOnPlanet(isLeiaOnPlanet);
     }
 
 }
