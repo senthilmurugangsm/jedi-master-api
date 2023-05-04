@@ -1,5 +1,6 @@
 target/
 .mvn/*
+logs/
 **/src/main/**/target/
 **/src/test/**/target/
 
