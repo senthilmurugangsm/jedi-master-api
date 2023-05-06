@@ -98,15 +98,16 @@ public class StarWarServiceImpl implements StarWarService {
             }
             log.info("isPeopleExistOnResidents : {}", isPeopleExistOnResidents);
 
-            // Double-check that Leia's homeworld is listed as Alderaan
-            boolean isHomeworldUrlMatched = false;
+            // Double-check that Leia's homeworld is listed as Alderaan and name match.
+            boolean isHomeworldUrlAndNameMatched = false;
             if (isPeopleExistOnResidents) {
                 PeopleApiResponse peopleApiResponse = fetchPeople(peopleUrl);
                 String peopleHomeworldUrl = peopleApiResponse.getHomeworld();
-                isHomeworldUrlMatched = planetApiResponse.getUrl().equals(peopleHomeworldUrl);
+                isHomeworldUrlAndNameMatched = planetApiResponse.getUrl().equals(peopleHomeworldUrl)
+                        && "Leia Organa".equals(peopleApiResponse.getName());
             }
-            log.info("isHomeworldUrlMatched : {}", isHomeworldUrlMatched);
-            return (isPeopleExistOnResidents && isHomeworldUrlMatched);
+            log.info("isHomeworldUrlAndNameMatched : {}", isHomeworldUrlAndNameMatched);
+            return (isPeopleExistOnResidents && isHomeworldUrlAndNameMatched);
         } catch (Exception ex) {
             log.error("planetUrl : {} and peopleUrl : {}, Exception occurred : {}", planetUrl, peopleUrl, ex.getMessage());
             String message = String.format(JediMasterUtility.ERROR_MSG, "on checking People live on planet", ex.getMessage());
