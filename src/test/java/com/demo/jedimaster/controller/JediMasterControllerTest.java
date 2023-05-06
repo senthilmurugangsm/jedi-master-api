@@ -4,7 +4,7 @@ import com.demo.jedimaster.dto.StarWarsInfo;
 import com.demo.jedimaster.dto.Starship;
 import com.demo.jedimaster.model.PeopleApiResponse;
 import com.demo.jedimaster.model.StarshipApiResponse;
-import com.demo.jedimaster.service.StarWarService;
+import com.demo.jedimaster.service.JediMasterService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +36,7 @@ public class JediMasterControllerTest {
     JediMasterController jediMasterController;
 
     @Mock
-    private StarWarService starWarService;
+    private JediMasterService jediMasterService;
 
     @Value("${swapi.api.base-url}")
     private String swapiApiBaseUrl;
@@ -90,15 +90,15 @@ public class JediMasterControllerTest {
     @Test
     public void fetchStarWarsInformationTest() {
         String peopleDarthVaderUrl = swapiApiBaseUrl + peopleDarthVader;
-        when(starWarService.fetchPeople(peopleDarthVaderUrl)).thenReturn(getPeopleApiResponse());
-        when(starWarService.fetchStarship(STARTSHIP_13)).thenReturn(getStarshipApiResponse());
+        when(jediMasterService.fetchPeople(peopleDarthVaderUrl)).thenReturn(getPeopleApiResponse());
+        when(jediMasterService.fetchStarship(STARTSHIP_13)).thenReturn(getStarshipApiResponse());
 
         String starshipDeathStarUrl = swapiApiBaseUrl + starshipDeathStar;
-        when(starWarService.getCrewCount(starshipDeathStarUrl)).thenReturn(1);
+        when(jediMasterService.getCrewCount(starshipDeathStarUrl)).thenReturn(1);
 
         String planetAlderaanUrl = swapiApiBaseUrl + planetAlderaan;
         String peopleLeiaOrganaUrl = swapiApiBaseUrl + peopleLeiaOrgana;
-        when(starWarService.isPeopleLiveOnPlanet(planetAlderaanUrl, peopleLeiaOrganaUrl))
+        when(jediMasterService.isPeopleLiveOnPlanet(planetAlderaanUrl, peopleLeiaOrganaUrl))
                 .thenReturn(true);
 
         ResponseEntity<Object> responseEntity = jediMasterController.fetchStarWarsInformation();
@@ -108,7 +108,7 @@ public class JediMasterControllerTest {
     @Test
     public void fetchStarWarsInformationExceptionTest() {
         String peopleDarthVaderUrl = swapiApiBaseUrl + peopleDarthVader;
-        when(starWarService.fetchPeople(peopleDarthVaderUrl)).thenThrow(RuntimeException.class);
+        when(jediMasterService.fetchPeople(peopleDarthVaderUrl)).thenThrow(RuntimeException.class);
         ResponseEntity<Object> responseEntity = jediMasterController.fetchStarWarsInformation();
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
     }
@@ -116,9 +116,9 @@ public class JediMasterControllerTest {
     @Test
     public void findDarthVaderStarshipTest() throws Exception {
         String peopleDarthVaderUrl = swapiApiBaseUrl + peopleDarthVader;
-        when(starWarService.fetchPeople(peopleDarthVaderUrl)).thenReturn(getPeopleApiResponse());
+        when(jediMasterService.fetchPeople(peopleDarthVaderUrl)).thenReturn(getPeopleApiResponse());
         StarshipApiResponse starshipApiResponse = getStarshipApiResponse();
-        when(starWarService.fetchStarship(STARTSHIP_13)).thenReturn(starshipApiResponse);
+        when(jediMasterService.fetchStarship(STARTSHIP_13)).thenReturn(starshipApiResponse);
 
         StarWarsInfo starWarsInfo = mock(StarWarsInfo.class);
         Starship starship = new Starship(starshipApiResponse.getName(),
@@ -132,7 +132,7 @@ public class JediMasterControllerTest {
         String peopleDarthVaderUrl = swapiApiBaseUrl + peopleDarthVader;
         PeopleApiResponse peopleApiResponse = getPeopleApiResponse();
         peopleApiResponse.setStarships(null);
-        when(starWarService.fetchPeople(peopleDarthVaderUrl)).thenReturn(peopleApiResponse);
+        when(jediMasterService.fetchPeople(peopleDarthVaderUrl)).thenReturn(peopleApiResponse);
 
         StarWarsInfo starWarsInfo = mock(StarWarsInfo.class);
         Whitebox.invokeMethod(jediMasterController, "findDarthVaderStarship", starWarsInfo);
@@ -142,7 +142,7 @@ public class JediMasterControllerTest {
     @Test
     public void findDeathStarCrewCountTest() throws Exception {
         String starshipDeathStarUrl = swapiApiBaseUrl + starshipDeathStar;
-        when(starWarService.getCrewCount(starshipDeathStarUrl)).thenReturn(100);
+        when(jediMasterService.getCrewCount(starshipDeathStarUrl)).thenReturn(100);
 
         StarWarsInfo starWarsInfo = mock(StarWarsInfo.class);
         Whitebox.invokeMethod(jediMasterController, "findDeathStarCrewCount", starWarsInfo);
@@ -153,7 +153,7 @@ public class JediMasterControllerTest {
     public void checkLeiaOnPlanetAlderaanTest() throws Exception {
         String planetAlderaanUrl = swapiApiBaseUrl + planetAlderaan;
         String peopleLeiaOrganaUrl = swapiApiBaseUrl + peopleLeiaOrgana;
-        when(starWarService.isPeopleLiveOnPlanet(planetAlderaanUrl, peopleLeiaOrganaUrl))
+        when(jediMasterService.isPeopleLiveOnPlanet(planetAlderaanUrl, peopleLeiaOrganaUrl))
                 .thenReturn(true);
 
         StarWarsInfo starWarsInfo = mock(StarWarsInfo.class);

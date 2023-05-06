@@ -4,7 +4,7 @@ import com.demo.jedimaster.dto.StarWarsInfo;
 import com.demo.jedimaster.dto.Starship;
 import com.demo.jedimaster.model.PeopleApiResponse;
 import com.demo.jedimaster.model.StarshipApiResponse;
-import com.demo.jedimaster.service.StarWarService;
+import com.demo.jedimaster.service.JediMasterService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,7 @@ import java.util.List;
 public class JediMasterController {
 
     @Autowired
-    StarWarService starWarService;
+    JediMasterService jediMasterService;
 
     @Value("${swapi.api.base-url}")
     private String swapiApiBaseUrl;
@@ -56,13 +56,13 @@ public class JediMasterController {
 
     private void findDarthVaderStarship(StarWarsInfo starWarsInfo) {
         String peopleDarthVaderUrl = swapiApiBaseUrl + peopleDarthVader;
-        PeopleApiResponse darthVaderPeople = starWarService.fetchPeople(peopleDarthVaderUrl);
+        PeopleApiResponse darthVaderPeople = jediMasterService.fetchPeople(peopleDarthVaderUrl);
         List<String> starships = darthVaderPeople.getStarships();
 
         StarshipApiResponse starshipApiResponse = null;
         if (starships != null && starships.size() > 0) {
             String starshipDarthVaderUrl = starships.get(0);
-            starshipApiResponse = starWarService.fetchStarship(starshipDarthVaderUrl);
+            starshipApiResponse = jediMasterService.fetchStarship(starshipDarthVaderUrl);
             Starship starship = new Starship(starshipApiResponse.getName(), starshipApiResponse.getStarshipClass(), starshipApiResponse.getModel());
             starWarsInfo.setStarship(starship);
             log.info("Total starships : {}", starships.size());
@@ -74,14 +74,14 @@ public class JediMasterController {
 
     private void findDeathStarCrewCount(StarWarsInfo starWarsInfo) {
         String starshipDeathStarUrl = swapiApiBaseUrl + starshipDeathStar;
-        int crew = starWarService.getCrewCount(starshipDeathStarUrl);
+        int crew = jediMasterService.getCrewCount(starshipDeathStarUrl);
         starWarsInfo.setCrew(crew);
     }
 
     private void checkLeiaOnPlanetAlderaan(StarWarsInfo starWarsInfo) {
         String planetAlderaanUrl = swapiApiBaseUrl + planetAlderaan;
         String peopleLeiaOrganaUrl = swapiApiBaseUrl + peopleLeiaOrgana;
-        boolean isLeiaOnPlanet = starWarService.isPeopleLiveOnPlanet(planetAlderaanUrl, peopleLeiaOrganaUrl);
+        boolean isLeiaOnPlanet = jediMasterService.isPeopleLiveOnPlanet(planetAlderaanUrl, peopleLeiaOrganaUrl);
         starWarsInfo.setLeiaOnPlanet(isLeiaOnPlanet);
     }
 

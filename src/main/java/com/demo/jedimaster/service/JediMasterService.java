@@ -6,7 +6,7 @@ import com.demo.jedimaster.model.StarshipApiResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface StarWarService {
+public interface JediMasterService {
     PeopleApiResponse fetchPeople(String peopleUrl);
 
     StarshipApiResponse fetchStarship(String starshipUrl);

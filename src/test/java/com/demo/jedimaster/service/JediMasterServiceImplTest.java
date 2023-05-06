@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 @PowerMockRunnerDelegate(SpringRunner.class)
 @PowerMockIgnore(value = {"javax.management.*"})
 @PrepareForTest({ RestTemplate.class})
-public class StarWarServiceImplTest {
+public class JediMasterServiceImplTest {
 
     @Value("${swapi.api.base-url}")
     private String swapiApiBaseUrl;
@@ -54,7 +54,7 @@ public class StarWarServiceImplTest {
     private String leiaName;
 
     @InjectMocks
-    private StarWarServiceImpl starWarService;
+    private JediMasterServiceImpl jediMasterService;
 
     @Mock
     private RestTemplate restTemplate;
@@ -66,7 +66,7 @@ public class StarWarServiceImplTest {
 
     @Before
     public void setUp() {
-        ReflectionTestUtils.setField(starWarService, "leiaName",
+        ReflectionTestUtils.setField(jediMasterService, "leiaName",
                 leiaName);
     }
 
@@ -78,7 +78,7 @@ public class StarWarServiceImplTest {
         when(restTemplateResponseHandler.handleResponse(any(ResponseEntity.class)))
                 .thenReturn(expectedResponse);
 
-        PeopleApiResponse actualResponse = starWarService.fetchPeople(swapiApiBaseUrl + peopleLeiaOrgana);
+        PeopleApiResponse actualResponse = jediMasterService.fetchPeople(swapiApiBaseUrl + peopleLeiaOrgana);
         assertEquals(expectedResponse.getName(), actualResponse.getName());
         assertEquals(expectedResponse.getUrl(), actualResponse.getUrl());
     }
@@ -87,7 +87,7 @@ public class StarWarServiceImplTest {
     public void fetchPeopleExceptionTest() {
         when(restTemplate.getForEntity(swapiApiBaseUrl + peopleLeiaOrgana, PeopleApiResponse.class))
                 .thenThrow(new RuntimeException(SWAPI_ERROR_RESPONSE));
-        starWarService.fetchPeople(swapiApiBaseUrl + peopleLeiaOrgana);
+        jediMasterService.fetchPeople(swapiApiBaseUrl + peopleLeiaOrgana);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class StarWarServiceImplTest {
         when(restTemplateResponseHandler.handleResponse(any(ResponseEntity.class)))
                 .thenReturn(expectedResponse);
 
-        StarshipApiResponse actualResponse = starWarService.fetchStarship(swapiApiBaseUrl + starshipDeathStar);
+        StarshipApiResponse actualResponse = jediMasterService.fetchStarship(swapiApiBaseUrl + starshipDeathStar);
         assertEquals(expectedResponse.getName(), actualResponse.getName());
         assertEquals(expectedResponse.getUrl(), actualResponse.getUrl());
     }
@@ -107,7 +107,7 @@ public class StarWarServiceImplTest {
     public void fetchStarshipExceptionTest() {
         when(restTemplate.getForEntity(swapiApiBaseUrl + starshipDeathStar, StarshipApiResponse.class))
                 .thenThrow(new RuntimeException(SWAPI_ERROR_RESPONSE));
-        starWarService.fetchStarship(swapiApiBaseUrl + starshipDeathStar);
+        jediMasterService.fetchStarship(swapiApiBaseUrl + starshipDeathStar);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class StarWarServiceImplTest {
         when(restTemplateResponseHandler.handleResponse(any(ResponseEntity.class)))
                 .thenReturn(expectedResponse);
 
-        PlanetApiResponse actualResponse = starWarService.fetchPlanet(swapiApiBaseUrl + planetAlderaan);
+        PlanetApiResponse actualResponse = jediMasterService.fetchPlanet(swapiApiBaseUrl + planetAlderaan);
         assertEquals(expectedResponse.getName(), actualResponse.getName());
         assertEquals(expectedResponse.getUrl(), actualResponse.getUrl());
     }
@@ -127,7 +127,7 @@ public class StarWarServiceImplTest {
     public void fetchPlanetExceptionTest() {
         when(restTemplate.getForEntity(swapiApiBaseUrl + planetAlderaan, PlanetApiResponse.class))
                 .thenThrow(new RuntimeException(SWAPI_ERROR_RESPONSE));
-        starWarService.fetchPlanet(swapiApiBaseUrl + planetAlderaan);
+        jediMasterService.fetchPlanet(swapiApiBaseUrl + planetAlderaan);
     }
 
     @Test
@@ -137,7 +137,7 @@ public class StarWarServiceImplTest {
                 .thenReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
         when(restTemplateResponseHandler.handleResponse(any(ResponseEntity.class)))
                 .thenReturn(expectedResponse);
-        int actualCrewCount = starWarService.getCrewCount(swapiApiBaseUrl + starshipDeathStar);
+        int actualCrewCount = jediMasterService.getCrewCount(swapiApiBaseUrl + starshipDeathStar);
 
         assertEquals(Integer.parseInt(expectedResponse.getCrew().replace(",", "")), actualCrewCount);
     }
@@ -150,7 +150,7 @@ public class StarWarServiceImplTest {
                 .thenReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
         when(restTemplateResponseHandler.handleResponse(any(ResponseEntity.class)))
                 .thenReturn(expectedResponse);
-        int actualCrewCount = starWarService.getCrewCount(swapiApiBaseUrl + starshipDeathStar);
+        int actualCrewCount = jediMasterService.getCrewCount(swapiApiBaseUrl + starshipDeathStar);
 
         assertEquals(0, actualCrewCount);
     }
@@ -159,7 +159,7 @@ public class StarWarServiceImplTest {
     public void getCrewCountExceptionTest() {
         when(restTemplate.getForEntity(swapiApiBaseUrl + starshipDeathStar, StarshipApiResponse.class))
                 .thenThrow(new RuntimeException(SWAPI_ERROR_RESPONSE));
-        starWarService.getCrewCount(swapiApiBaseUrl + starshipDeathStar);
+        jediMasterService.getCrewCount(swapiApiBaseUrl + starshipDeathStar);
     }
 
     @Test
@@ -171,10 +171,10 @@ public class StarWarServiceImplTest {
                 .thenReturn(expectedPlanetResponse);
 
         PeopleApiResponse expectedPeopleResponse = getLeiaPeopleApiResponse();
-        when(starWarService.fetchPeople(swapiApiBaseUrl + peopleLeiaOrgana))
+        when(jediMasterService.fetchPeople(swapiApiBaseUrl + peopleLeiaOrgana))
                 .thenReturn(expectedPeopleResponse);
 
-        assertTrue(starWarService.isPeopleLiveOnPlanet(swapiApiBaseUrl + planetAlderaan, swapiApiBaseUrl + peopleLeiaOrgana));
+        assertTrue(jediMasterService.isPeopleLiveOnPlanet(swapiApiBaseUrl + planetAlderaan, swapiApiBaseUrl + peopleLeiaOrgana));
     }
 
     @Test
@@ -191,17 +191,17 @@ public class StarWarServiceImplTest {
                 .thenReturn(expectedPlanetResponse);
 
         PeopleApiResponse expectedPeopleResponse = getLeiaPeopleApiResponse();
-        when(starWarService.fetchPeople(swapiApiBaseUrl + peopleLeiaOrgana))
+        when(jediMasterService.fetchPeople(swapiApiBaseUrl + peopleLeiaOrgana))
                 .thenReturn(expectedPeopleResponse);
 
-        assertFalse(starWarService.isPeopleLiveOnPlanet(swapiApiBaseUrl + planetAlderaan, swapiApiBaseUrl + peopleLeiaOrgana));
+        assertFalse(jediMasterService.isPeopleLiveOnPlanet(swapiApiBaseUrl + planetAlderaan, swapiApiBaseUrl + peopleLeiaOrgana));
     }
 
     @Test(expected = RuntimeException.class)
     public void isPeopleNotLiveOnPlanetExceptionTest() {
         when(restTemplate.getForEntity(swapiApiBaseUrl + peopleLeiaOrgana, PeopleApiResponse.class))
                 .thenThrow(new RuntimeException(SWAPI_ERROR_RESPONSE));
-        starWarService.isPeopleLiveOnPlanet(swapiApiBaseUrl + planetAlderaan, swapiApiBaseUrl + peopleLeiaOrgana);
+        jediMasterService.isPeopleLiveOnPlanet(swapiApiBaseUrl + planetAlderaan, swapiApiBaseUrl + peopleLeiaOrgana);
     }
 
     private static PeopleApiResponse getLeiaPeopleApiResponse() {

@@ -16,14 +16,14 @@ import java.util.List;
 
 @Component
 @Log4j2
-public class StarWarServiceImpl implements StarWarService {
+public class JediMasterServiceImpl implements JediMasterService {
 
     @Autowired
     RestTemplate restTemplate;
 
     @Autowired
     RestTemplateResponseHandler restTemplateResponseHandler;
-    
+
     @Value("${swapi.api.people.leia-organa.name}")
     private String leiaName;
 
