@@ -35,6 +35,7 @@ public class JediMasterController {
 
     @Value("${swapi.api.planet.alderaan}")
     private String planetAlderaan;
+
     @Value("${swapi.api.starship.death-star}")
     private String starshipDeathStar;
 

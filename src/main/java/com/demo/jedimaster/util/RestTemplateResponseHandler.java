@@ -1,5 +1,6 @@
-package com.demo.jedimaster.exception;
+package com.demo.jedimaster.util;
 
+import com.demo.jedimaster.exception.RestTemplateException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 

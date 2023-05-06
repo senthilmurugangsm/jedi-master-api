@@ -1,6 +1,6 @@
 package com.demo.jedimaster.service;
 
-import com.demo.jedimaster.exception.RestTemplateResponseHandler;
+import com.demo.jedimaster.util.RestTemplateResponseHandler;
 import com.demo.jedimaster.model.PeopleApiResponse;
 import com.demo.jedimaster.model.PlanetApiResponse;
 import com.demo.jedimaster.model.StarshipApiResponse;
