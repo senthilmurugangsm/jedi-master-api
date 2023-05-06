@@ -4,6 +4,7 @@ import com.demo.jedimaster.util.RestTemplateResponseHandler;
 import com.demo.jedimaster.model.PeopleApiResponse;
 import com.demo.jedimaster.model.PlanetApiResponse;
 import com.demo.jedimaster.model.StarshipApiResponse;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -48,6 +50,9 @@ public class StarWarServiceImplTest {
     @Value("${swapi.api.starship.death-star}")
     private String starshipDeathStar;
 
+    @Value("${swapi.api.people.leia-organa.name}")
+    private String leiaName;
+
     @InjectMocks
     private StarWarServiceImpl starWarService;
 
@@ -58,6 +63,12 @@ public class StarWarServiceImplTest {
     private RestTemplateResponseHandler restTemplateResponseHandler;
 
     private static final String SWAPI_ERROR_RESPONSE = "Swapi api is failed";
+
+    @Before
+    public void setUp() {
+        ReflectionTestUtils.setField(starWarService, "leiaName",
+                leiaName);
+    }
 
     @Test
     public void fetchPeopleTest() {

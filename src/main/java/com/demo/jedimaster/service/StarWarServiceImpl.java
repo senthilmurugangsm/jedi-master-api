@@ -7,6 +7,7 @@ import com.demo.jedimaster.model.StarshipApiResponse;
 import com.demo.jedimaster.util.JediMasterUtility;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -22,9 +23,9 @@ public class StarWarServiceImpl implements StarWarService {
 
     @Autowired
     RestTemplateResponseHandler restTemplateResponseHandler;
-
-    @Autowired
-    JediMasterUtility jediMasterUtility;
+    
+    @Value("${swapi.api.people.leia-organa.name}")
+    private String leiaName;
 
     @Override
     public PeopleApiResponse fetchPeople(String peopleUrl) {
@@ -104,7 +105,7 @@ public class StarWarServiceImpl implements StarWarService {
                 PeopleApiResponse peopleApiResponse = fetchPeople(peopleUrl);
                 String peopleHomeworldUrl = peopleApiResponse.getHomeworld();
                 isHomeworldUrlAndNameMatched = planetApiResponse.getUrl().equals(peopleHomeworldUrl)
-                        && "Leia Organa".equals(peopleApiResponse.getName());
+                        && leiaName.equals(peopleApiResponse.getName());
             }
             log.info("isHomeworldUrlAndNameMatched : {}", isHomeworldUrlAndNameMatched);
             return (isPeopleExistOnResidents && isHomeworldUrlAndNameMatched);
