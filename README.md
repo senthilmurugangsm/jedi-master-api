@@ -6,19 +6,20 @@
 - [Technologies Used](#technologies-used)
 - [Prerequisites](#prerequisites)
 - [How to run](#how-to-run)
-- [Swagger Link](#swagger-link)
+- [Swagger UI](#swagger-ui)
 - [API Endpoints](#api-endpoints)
 - [Testing](#testing)
-- [Swagger Link](#swagger-link)
+- [References](#references)
 
 ## About the Project
-Jedi Master API application is a Spring Boot application that allows you to retrieve information from Star Wars 
-(Swapi API - https://swapi.dev/) about the Star Wars universe. 
+Jedi Master API application is a Spring Boot application that allows you to retrieve information about the Star Wars 
+universe from Swapi API https://swapi.dev/. 
 The API can be used to find out what starship Darth Vader is using, the number of crews on board the Death Star, and 
 whether Princess Leia is on the planet Alderaan.
 
 ## Technologies Used
-* Java 8, Spring Boot 2.7.11, Maven, Log4j2, Springfox Swagger, Powermock and Junit.
+* Java 8, Spring Boot 2.7.11, Maven, Log4j2 
+* Springfox Swagger, Lombok, Powermock and Junit
 
 ## Prerequisites
 * Java 8 or higher
@@ -31,10 +32,10 @@ whether Princess Leia is on the planet Alderaan.
 or run using main class ```JediMasterApiApplication.java```<br/>
 * Once the application has started, you can access the Swagger UI by navigating to http://localhost:9090/api/swagger-ui/index.html.
 
-## Swagger Link
+## Swagger UI
 The API documentation can be accessible using Swagger link http://localhost:9090/api/swagger-ui/index.html. <br/>
 
-<img src="./doc-resources/swagger-api-doc.png" alt="Swagger API doc" height="300" width="600">
+<img src="./doc-resources/swagger-api-doc.png" alt="Swagger API doc" height="300" width="500">
 
 ## API Endpoints
 The Jedi Master API has a request url http://localhost:9090/api/jedi-master/information and endpoint as below. <br/>
@@ -51,7 +52,7 @@ This endpoint retrieves the below information the describes, <br/>
 ### Response:
 Refer the below sample response for this endpoint. <br/>
 
-<img src="./doc-resources/swagger-response.png" alt="Sample API response" height="300" width="600">
+<img src="./doc-resources/swagger-response.png" alt="Sample API response" height="300" width="500">
 
 
 ## Testing
